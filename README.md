@@ -1,7 +1,7 @@
 RPN Evaluator in Ruby
 =====================
 
-[An explanation of RPN Evaluator](http://en.wikipedia.org/wiki/Reverse_Polish_notation)
+[An explanation of an RPN Evaluator](http://en.wikipedia.org/wiki/Reverse_Polish_notation)
 
 Ruby Version: 2.0.0
 
