@@ -3,6 +3,7 @@
 def ctoi(char)
   return_i = char.ord - "0".ord
   if return_i < 0 || return_i > 9
+    p char
     puts "Invalid number"
     exit
   end
@@ -18,7 +19,7 @@ def atoi(str)
 end
 
 def atof(str)
-  return str if str.class == Fixnum || str.class == Float
+  # return str if str.class == Fixnum || str.class == Float
   arr_of_str = str.split(/\D/)
   if arr_of_str.length == 2
     total = 0
@@ -31,27 +32,35 @@ def atof(str)
   end
 end
 
+def ftoi(str)
+  #Simplifies result from float to int if possible.
+  arr = str.split(".")
+  return atoi(arr[0]).to_s if arr[1] == "0"
+  arr.join(".")
+end
+
 def start
+  #Grabs argument from command line
   array = ARGV[0].split(" ")
   calculate(array)
 end
 
 def calculate(arr, stack = [])
-  p arr
-  p stack
+  puts "Array: " + arr.to_s
+  puts "Stack: " + stack.to_s
   puts " "
   operators = ["+", "-", "*", "/"]
-  digits = ('0'..'9').to_a
 
   if arr.length == 3 && stack.empty?
-    p "yooo"
-    val2, val1, op = arr.shift, arr.shift, arr.shift
+    val1, val2, op = arr.shift, arr.shift, arr.shift
     result = perform_op(op, val1, val2)
-    puts "The result of the calculation is: " + result
+    puts "The result of the calculation is: " + ftoi(result)
     return
   elsif arr.length <= 1 && !stack.empty?
-    p "end"
-    calculate(stack + arr, [])
+    new_arr = []
+    stack.each_index{ |i| new_arr << stack[stack.length-1-i] }
+    new_arr += arr
+    calculate(new_arr, [])
   elsif operators.include?(arr.first)
     if stack.length < 2
       puts "Not enough arguments."
@@ -59,7 +68,6 @@ def calculate(arr, stack = [])
     else
       val2, val1 = stack.shift, stack.shift
       result = perform_op(arr.shift, val1, val2)
-      puts "result: " + result
       stack.unshift(result)
       calculate(arr, stack)
     end
@@ -87,62 +95,5 @@ def perform_op(op, val1, val2)
     exit
   end
 end
-
-
-
-
-
-
-
-
-
-# def calculate(arr)
-#   finished_arr = []
-#   operators = ["+", "-", "*", "/"]
-#   start_pos = 0
-#
-#   arr.each_index do |idx|
-#     if operators.include?(arr[idx])
-#       to_perform = arr[start_pos..idx]
-#
-#       if to_perform.length < 3
-#         to_perform = finished_arr << to_perform
-#       end
-#
-#       finished_arr << perform_op(to_perform)
-#       start_pos = idx + 1
-#       p start_pos
-#     end
-#   end
-#
-#   if finished_arr.length == 1
-#     finished_arr.first
-#   else
-#     arr = finished_arr << arr[start_pos..-1]
-#     p arr
-#     calculate(arr)
-#   end
-# end
-#
-# def perform_op(arr)
-#   if arr.length < 3
-#     puts "not enough arguments"
-#     exit
-#   elsif arr.length == 3
-#     case arr.last
-#     when "+"
-#       return atof(arr[0]) + atof(arr[1])
-#     when "-"
-#       return atof(arr[0]) - atof(arr[1])
-#     when "*"
-#       return atof(arr[0]) * atof(arr[1])
-#     when "/"
-#       return atof(arr[0]) / atof(arr[1])
-#     else
-#       puts "invalid operator"
-#       exit
-#     end
-#   end
-# end
 
 start
